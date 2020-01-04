@@ -1,0 +1,24 @@
+{
+  "name": "dominion_counter",
+  "version": "0.1.0",
+  "description": "dominion support tool",
+  "main": "src/index.html",
+  "scripts": {
+    "start": "parcel src/index.html",
+    "build": "parcel build src/index.html --public-url . ; cp dist/index.html index.html"
+  },
+  "keywords": [
+    "dominion",
+    "tool"
+  ],
+  "author": "kekemoto",
+  "license": "Apache-2.0",
+  "devDependencies": {
+    "parcel-plugin-inliner": "^1.0.10",
+    "@babel/core": "^7.7.7",
+    "immutable": "^4.0.0-rc.12",
+    "parcel-bundler": "^1.12.4",
+    "react": "^16.12.0",
+    "react-dom": "^16.12.0"
+  }
+}

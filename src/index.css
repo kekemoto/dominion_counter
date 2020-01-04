@@ -1,0 +1,73 @@
+body {
+	font-size: 1.5em;
+	font-family: "M PLUS Rounded 1c", "游ゴシック", YuGothic, "ヒラギノ角ゴ ProN W3", "Hiragino Kaku Gothic ProN", "Arial", "メイリオ";
+}
+
+.row {
+	display: flex;
+	flex-wrap: wrap;
+}
+
+.column {
+	display: flex;
+	flex-direction: column;
+}
+
+.section {
+	margin: 0.5em;
+}
+
+/* add-card */
+
+.add-card-title {
+	text-align: center;
+	margin: 1em;
+}
+
+.add-card-card {
+	text-align: center;
+	margin: 0.5em;
+}
+
+/* deck */
+
+.deck-cell {
+	flex-grow: 1;
+}
+
+.deck-section {
+	margin: 0.5em;
+}
+
+.deck-footer {
+	position: fixed;
+	bottom: 0;
+	width: 100vw;
+}
+
+/* field */
+
+.field-title {
+	text-align: center;
+	margin: 0.5em 0;
+}
+
+.field-card {
+	text-align: center;
+	padding: 0.5em;
+}
+
+.field-selected {
+	text-align: center;
+	background-color: lightskyblue;
+}
+
+.field-random {
+	background-color: #d2ffd2;
+}
+
+.field-submit {
+	text-align: center;
+	border: solid thin;
+	margin: 0.5em;
+}
