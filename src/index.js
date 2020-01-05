@@ -4,6 +4,8 @@ import { Map, List, Set, Range } from 'immutable'
 
 import { CARDS } from '../data/cards.js'
 
+// Common
+
 function shuffleList(list){
 	for(let i = list.size - 1; i > 0; i--){
 		let r = Math.floor(Math.random() * (i + 1))
@@ -34,7 +36,10 @@ const ACTION_CARDS = sortCard(CARDS.filter(x => x.type === 'action').toList())
 const DEFAULT_FIELD_TYPE = Set(['point', 'money'])
 const DEFAULT_FIELD_CARDS = CARDS.filter(x => DEFAULT_FIELD_TYPE.has(x.type)).toList()
 
-function SetField({setPage, fieldAction}){
+// Common
+// Field
+
+function FieldPage({setPage, fieldAction}){
 	const [cards, setCards] = useState(Set())
 
 	function isSelect(card){
@@ -59,7 +64,7 @@ function SetField({setPage, fieldAction}){
 
 	function submit(){
 		fieldAction({type: 'set', cards: cards.values()})
-		setPage('deckView')
+		setPage('DeckPage')
 	}
 	
 	return <Fragment>
@@ -72,10 +77,13 @@ function SetField({setPage, fieldAction}){
 		</Fragment>
 }
 
-function AddCard({setPage, field, deckAction}){
+// Field
+// Deck
+
+function DeckModeAdd({setPage, field, deckAction}){
 	function submit(card){
 		deckAction({type: 'add', card})
-		setPage('deckView')
+		setPage('DeckPage')
 	}
 
 	const fieldCards = field.concat(DEFAULT_FIELD_CARDS)
@@ -83,7 +91,7 @@ function AddCard({setPage, field, deckAction}){
 	return <Fragment>
 		<div className='add-card-title'>デッキに追加するカード</div>
 		{fieldCards.map(x => <div key={x.name} onClick={() => submit(x)} className='add-card-card'>{x.name}</div>)}
-		<section onClick={() => setPage('deckView')} className="section pure-button">戻る</section>
+		<section onClick={() => setPage('DeckPage')} className="section pure-button">戻る</section>
 	</Fragment>
 }
 
@@ -91,23 +99,27 @@ function deckSize(deck){
  return deck.reduce((total, size) => total + size)
 }
 
-function DeckCardList({deck, onClickCard}){
-	return deck.map((size, card) => 
-		<div key={card.name} onClick={event => onClickCard(card, event)} className='row'>
-			<div>{card.name}：</div>
-			<div>{size}枚：</div>
-			<div>{Math.round(size * 1000 / deckSize(deck)) / 10}％</div>
-		</div>
-	).toList()
+function DeckView({deck, onClickCard}){
+	return <div className='row'>
+		{deck.map((size, card) => 
+			<div key={card.name} onClick={event => onClickCard(card, event)} className='column card-view'>
+				<div className='card-view-name'>{card.name}</div>
+				<div className='card-view-meta'>
+					<div>{size}枚：</div>
+					<div>{Math.round(size * 1000 / deckSize(deck)) / 10}％</div>
+				</div>
+			</div>
+		).toList()}
+	</div>
 }
 
-function DeckView({setPage, deck, resetGame}){
+function DeckViewMode({setPage, deck, resetGame}){
 	const totalPoint = deck.filter((_, card) => card.type === 'point').reduce((total, size, card) => total + (card.value * size), 0)
 
 	return <Fragment>
 		<div className='deck-footer row'>
-			<div onClick={() => setPage('addCard')} className='pure-button deck-cell'>追加</div>
-			<div onClick={() => setPage('removeCard')} className='pure-button deck-cell'>削除</div>
+			<div onClick={() => setPage('DeckModeAdd')} className='pure-button deck-cell'>追加</div>
+			<div onClick={() => setPage('DeckModeRemove')} className='pure-button deck-cell'>削除</div>
 			<div onClick={resetGame} className='pure-button deck-cell'>リセット</div>
 		</div>
 
@@ -123,20 +135,27 @@ function DeckView({setPage, deck, resetGame}){
 		</section>
 
 		<section className='deck-section'>
-			<DeckCardList deck={deck}/>
+			<DeckView deck={deck}/>
 		</section>
 	</Fragment>
 }
 
-function RemoveCard({setPage, deck, deckAction}){
+function DeckPage(props){
+	return <DeckViewMode {...props} />
+}
+
+function DeckModeRemove({setPage, deck, deckAction}){
 	return <Fragment>
 		<section className='section'>削除するカードを選択</section>
 		<section className='section'>
-			<DeckCardList deck={deck} onClickCard={card => deckAction({type: 'remove', card})} />
+			<DeckView deck={deck} onClickCard={card => deckAction({type: 'remove', card})} />
 		</section>
-		<section onClick={() => setPage('deckView')} className="section pure-button">戻る</section>
+		<section onClick={() => setPage('DeckPage')} className="section pure-button">戻る</section>
 	</Fragment>
 }
+
+// Deck
+// App
 
 function deckInit(){
 	return Map([[findCardName('銅貨'), 7], [findCardName('屋敷'), 3]])
@@ -177,7 +196,7 @@ function fieldReducer(state, action){
 	}
 }
 
-const initPage = 'setField'
+const initPage = 'FieldPage'
 
 function App(){
 	const [deck, deckAction] = useReducer(deckReducer, null, deckInit)
@@ -193,10 +212,10 @@ function App(){
 	}
 
 	const PAGES = {
-		setField: <SetField setPage={setPage} fieldAction={fieldAction}/>,
-		deckView: <DeckView setPage={setPage} deck={deck} resetGame={resetGame}/>,
-		addCard: <AddCard setPage={setPage} field={field} deckAction={deckAction}/>,
-		removeCard: <RemoveCard setPage={setPage} deck={deck} deckAction={deckAction}/>,
+		FieldPage: <FieldPage setPage={setPage} fieldAction={fieldAction}/>,
+		DeckPage: <DeckPage setPage={setPage} deck={deck} resetGame={resetGame}/>,
+		DeckModeAdd: <DeckModeAdd setPage={setPage} field={field} deckAction={deckAction}/>,
+		DeckModeRemove: <DeckModeRemove setPage={setPage} deck={deck} deckAction={deckAction}/>,
 	}
 
 	return PAGES[page]
