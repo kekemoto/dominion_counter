@@ -17,6 +17,18 @@ body {
 	margin: 0.5em;
 }
 
+/* card-view */
+
+.card-view {
+	flex-grow: 1;
+	padding: 0.7em 0em;
+}
+
+.card-view-info {
+	text-align: center;
+	min-width: 7em;
+}
+
 /* add-card */
 
 .add-card-title {

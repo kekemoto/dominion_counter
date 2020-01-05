@@ -17,7 +17,7 @@ name,pack,type,value,defaultField,sortOrder,cost
 改築,基本,action,,FALSE,10401,4
 鍛冶屋,基本,action,,FALSE,10402,4
 金貸し,基本,action,,FALSE,10403,4
-玉座,基本,action,,FALSE,10404,4
+玉座の間,基本,action,,FALSE,10404,4
 密猟者,基本,action,,FALSE,10405,4
 民兵,基本,action,,FALSE,10406,4
 役人,基本,action,,FALSE,10407,4
