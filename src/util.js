@@ -24,3 +24,5 @@ export function findCardName(name){
 export const ACTION_CARDS = CARDS.filter(x => x.type === 'action')
 
 export const DEFAULT_FIELD_CARDS = CARDS.filter(x => x.defaultField)
+
+export const DRAW_SIZE = 5

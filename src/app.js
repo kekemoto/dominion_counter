@@ -1,10 +1,10 @@
 import React, { Fragment, useState, useEffect, useReducer } from 'react'
 import ReactDOM from 'react-dom'
 import { Map, List, Set, Range } from 'immutable'
+import { combinations, round } from 'mathjs'
 
 import { CARDS } from '../data/cards.js'
-import { shuffleList, findCardName, ACTION_CARDS, DEFAULT_FIELD_CARDS } from './util.js'
-
+import { shuffleList, findCardName, ACTION_CARDS, DEFAULT_FIELD_CARDS, DRAW_SIZE } from './util.js'
 
 // Field
 
@@ -57,6 +57,16 @@ function deckPoint(deck){
 	return deck.filter((_, card) => card.type === 'point').reduce((total, size, card) => total + (card.value * size), 0)
 }
 
+function drawRate(totalSize, includeSize, drawSize){
+	const excludeSize = totalSize - includeSize
+	const rate = 1 - (combinations(excludeSize, Math.min(excludeSize, drawSize)) / combinations(totalSize, drawSize))
+	return round(rate * 100, 1)
+}
+
+function drawCardRate(card, deck){
+	return drawRate(deckSize(deck), deck.get(card) ?? 0, DRAW_SIZE)
+}
+
 function DeckCards({cards, deck, onClickCard = new Function}){
 	return <div className='row'>
 		{cards.map(card => {
@@ -65,7 +75,7 @@ function DeckCards({cards, deck, onClickCard = new Function}){
 			return <div key={card.name} onClick={event => onClickCard(card, event)} className='column card-view'>
 				<div className='card-view-info'>{card.name}</div>
 				<div className='card-view-info'>
-					<div>{cardSize}枚：{Math.round(cardSize * 1000 / deckSize(deck)) / 10}％</div>
+					<div>{cardSize}枚：{drawCardRate(card, deck)}％</div>
 				</div>
 			</div>
 		})}
