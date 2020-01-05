@@ -2,6 +2,8 @@ import React, { Fragment, useState, useEffect, useReducer } from 'react'
 import ReactDOM from 'react-dom'
 import { Map, List, Set, Range } from 'immutable'
 
+import { CARDS } from '../data/cards.js'
+
 function shuffleList(list){
 	for(let i = list.size - 1; i > 0; i--){
 		let r = Math.floor(Math.random() * (i + 1))
@@ -20,83 +22,39 @@ function comparator(a, b){
 }
 
 function sortCard(collection){
-	return collection.sort((a,b) => comparator(a.id, b.id))
+	return collection.sortBy(x => x.sortOrder)
 }
 
-class Card {
-	constructor(id, name, type, params = {}) {
-		this.id = id
-		this.name = name
-		this.type = type
-		
-		for(let key in params){
-			this[key] = params[key]
-		}
-	}
+function findCardName(name){
+	return CARDS.find(x => x.name === name)
 }
 
-const ALL_CARDS = Map([
-	new Card(1, '金貨', 'money', {value: 3}),
-	new Card(2, '銀貨', 'money', {value: 2}),
-	new Card(3, '銅貨', 'money', {value: 1}),
-	new Card(4, '属州', 'point', {value: 6}),
-	new Card(5, '公領', 'point', {value: 3}),
-	new Card(6, '屋敷', 'point', {value: 1}),
-	new Card(7, '呪い', 'point', {value: -1}),
-	new Card(8, '地下貯蔵庫', 'action'),
-	new Card(9, '礼拝堂', 'action'),
-	new Card(10, '堀', 'action'),
-	new Card(11, '家臣', 'action'),
-	new Card(12, '工房', 'action'),
-	new Card(13, '商人', 'action'),
-	new Card(14, '前駆者', 'action'),
-	new Card(15, '村', 'action'),
-	new Card(16, '改築', 'action'),
-	new Card(17, '鍛冶屋', 'action'),
-	new Card(18, '金貸し', 'action'),
-	new Card(19, '玉座の間', 'action'),
-	new Card(20, '密猟者', 'action'),
-	new Card(21, '民兵', 'action'),
-	new Card(22, '役人', 'action'),
-	new Card(23, '庭園', 'action'),
-	new Card(24, '市場', 'action'),
-	new Card(25, '衛兵', 'action'),
-	new Card(26, '議事堂', 'action'),
-	new Card(27, '研究所', 'action'),
-	new Card(28, '鉱山', 'action'),
-	new Card(29, '祝祭', 'action'),
-	new Card(30, '書庫', 'action'),
-	new Card(31, '山賊', 'action'),
-	new Card(32, '魔女', 'action'),
-	new Card(33, '職人', 'action'),
-].map(x => [x.id, x]))
-
-const ACTION_CARDS = sortCard(ALL_CARDS.filter(x => x.type === 'action').toList())
+const ACTION_CARDS = sortCard(CARDS.filter(x => x.type === 'action').toList())
 
 const DEFAULT_FIELD_TYPE = Set(['point', 'money'])
-const DEFAULT_FIELD_CARDS = ALL_CARDS.filter(x => DEFAULT_FIELD_TYPE.has(x.type)).toList()
+const DEFAULT_FIELD_CARDS = CARDS.filter(x => DEFAULT_FIELD_TYPE.has(x.type)).toList()
 
 function SetField({setPage, fieldAction}){
-	const [cards, setCards] = useState(Map())
+	const [cards, setCards] = useState(Set())
 
 	function isSelect(card){
-		return cards.has(card.id)
+		return cards.has(card)
 	}
 
-	function select(card){
-		setCards(cards.set(card.id, card))
+	function add(card){
+		setCards(cards.add(card))
 	}
 
 	function remove(card){
-		setCards(cards.delete(card.id))
+		setCards(cards.delete(card))
 	}
 
 	function toggle(card){
-		isSelect(card) ? remove(card) : select(card)
+		isSelect(card) ? remove(card) : add(card)
 	}
 
 	function random(){
-		setCards(Map(shuffleList(ACTION_CARDS).take(10).map(x => [x.id, x])))
+		setCards(shuffleList(ACTION_CARDS).take(10).toSet())
 	}
 
 	function submit(){
@@ -107,7 +65,7 @@ function SetField({setPage, fieldAction}){
 	return <Fragment>
 		<div className='field-title'>プレイするカードを選択</div>
 		<div className='row'>{
-			ACTION_CARDS.map(card => <div key={card.id} className={`field-card ${isSelect(card) && 'field-selected'}`} onClick={() => toggle(card)}>{card.name}</div>)
+			ACTION_CARDS.map(card => <div key={card.name} className={`field-card ${isSelect(card) && 'field-selected'}`} onClick={() => toggle(card)}>{card.name}</div>)
 				.push(<div key={'random'} className={'field-card field-random'} onClick={random}>ランダム</div>)
 		}</div>
 		<div onClick={submit} className="field-submit">決定</div>
@@ -124,7 +82,7 @@ function AddCard({setPage, field, deckAction}){
 
 	return <Fragment>
 		<div className='add-card-title'>デッキに追加するカード</div>
-		{fieldCards.map(x => <div key={x.id} onClick={() => submit(x)} className='add-card-card'>{x.name}</div>)}
+		{fieldCards.map(x => <div key={x.name} onClick={() => submit(x)} className='add-card-card'>{x.name}</div>)}
 		<section onClick={() => setPage('deckView')} className="section pure-button">戻る</section>
 	</Fragment>
 }
@@ -135,7 +93,7 @@ function deckSize(deck){
 
 function DeckCardList({deck, onClickCard}){
 	return deck.map((size, card) => 
-		<div key={card.id} onClick={event => onClickCard(card, event)} className='row'>
+		<div key={card.name} onClick={event => onClickCard(card, event)} className='row'>
 			<div>{card.name}：</div>
 			<div>{size}枚：</div>
 			<div>{Math.round(size * 1000 / deckSize(deck)) / 10}％</div>
@@ -181,7 +139,7 @@ function RemoveCard({setPage, deck, deckAction}){
 }
 
 function deckInit(){
-	return Map([[ALL_CARDS.get(3), 7], [ALL_CARDS.get(6), 3]])
+	return Map([[findCardName('銅貨'), 7], [findCardName('屋敷'), 3]])
 }
 
 function deckReducer(state, action){

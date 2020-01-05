@@ -5,6 +5,7 @@
   "main": "src/index.html",
   "scripts": {
     "start": "parcel src/index.html",
+    "data": "node data/convert.js",
     "build": "parcel build src/index.html --public-url . ; cp dist/index.html index.html"
   },
   "keywords": [
@@ -14,10 +15,11 @@
   "author": "kekemoto",
   "license": "Apache-2.0",
   "devDependencies": {
-    "parcel-plugin-inliner": "^1.0.10",
     "@babel/core": "^7.7.7",
+    "csv-parse": "^4.8.3",
     "immutable": "^4.0.0-rc.12",
     "parcel-bundler": "^1.12.4",
+    "parcel-plugin-inliner": "^1.0.10",
     "react": "^16.12.0",
     "react-dom": "^16.12.0"
   }
