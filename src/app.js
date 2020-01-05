@@ -3,36 +3,9 @@ import ReactDOM from 'react-dom'
 import { Map, List, Set, Range } from 'immutable'
 
 import { CARDS } from '../data/cards.js'
+import { shuffleList, findCardName, ACTION_CARDS, DEFAULT_FIELD_CARDS } from './util.js'
 
-// Common
 
-function shuffleList(list){
-	for(let i = list.size - 1; i > 0; i--){
-		let r = Math.floor(Math.random() * (i + 1))
-		let tmp = list.get(i)
-		list = list.set(i, list.get(r))
-		list = list.set(r, tmp)
-	}
-
-	return list
-}
-
-function comparator(a, b){
-	if (a < b) { return -1 }
-	if (a > b) { return 1 }
-	return 0
-}
-
-function findCardName(name){
-	return CARDS.find(x => x.name === name)
-}
-
-const ACTION_CARDS = CARDS.filter(x => x.type === 'action').toList().sortBy(x => x.sortOrder)
-
-const DEFAULT_FIELD_TYPE = Set(['point', 'money'])
-const DEFAULT_FIELD_CARDS = CARDS.filter(x => DEFAULT_FIELD_TYPE.has(x.type)).toList()
-
-// Common
 // Field
 
 function FieldPage({setPage, fieldAction}){
