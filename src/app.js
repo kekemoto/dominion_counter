@@ -59,7 +59,12 @@ function deckPoint(deck){
 
 function drawRate(totalSize, includeSize, drawSize){
 	const excludeSize = totalSize - includeSize
-	const rate = 1 - (combinations(excludeSize, Math.min(excludeSize, drawSize)) / combinations(totalSize, drawSize))
+
+	if (excludeSize < drawSize) {
+		return 100
+	}
+
+	const rate = 1 - (combinations(excludeSize, drawSize) / combinations(totalSize, drawSize))
 	return round(rate * 100, 1)
 }
 
