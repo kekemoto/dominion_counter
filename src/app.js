@@ -95,8 +95,8 @@ function DeckView({deck, onClickCard = new Function}){
 
 function DeckMetaView({deck}){
 	return <Fragment>
-		<div>総数：{deckSize(deck)}</div>
-		<div>得点：{deckPoint(deck)}</div>
+		<div>カード総数：{deckSize(deck)}</div>
+		<div>勝利点：{deckPoint(deck)}</div>
 	</Fragment>
 }
 
