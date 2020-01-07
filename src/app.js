@@ -100,14 +100,8 @@ function DeckMetaView({deck}){
 	</Fragment>
 }
 
-function DeckViewMode({setPage, deck, resetGame}){
+function DeckModeView({setPage, deck, resetGame}){
 	return <Fragment>
-		<div className='deck-footer row'>
-			<div onClick={() => setPage('DeckModeAdd')} className='pure-button deck-cell'>追加</div>
-			<div onClick={() => setPage('DeckModeRemove')} className='pure-button deck-cell'>削除</div>
-			<div onClick={resetGame} className='pure-button deck-cell'>リセット</div>
-		</div>
-
 		<section className='deck-section'>
 			<DeckMetaView deck={deck} />
 		</section>
@@ -118,28 +112,46 @@ function DeckViewMode({setPage, deck, resetGame}){
 	</Fragment>
 }
 
-function DeckModeAdd({setPage, field, deck, deckAction}){
+function DeckModeAdd({field, deck, deckAction}){
 	const fieldCards = field.concat(DEFAULT_FIELD_CARDS).sortBy(x => x.sortOrder)
 
 	return <Fragment>
-		<div className='add-card-title'>追加するカードを選択</div>
 		<DeckCards cards={fieldCards} deck={deck} onClickCard={card => deckAction({type: 'add', card})} />
-		<section onClick={() => setPage('DeckPage')} className="section pure-button">戻る</section>
 	</Fragment>
 }
 
-function DeckModeRemove({setPage, deck, deckAction}){
+function DeckModeRemove({deck, deckAction}){
 	return <Fragment>
-		<section className='section'>削除するカードを選択</section>
 		<section className='section'>
 			<DeckView deck={deck} onClickCard={card => deckAction({type: 'remove', card})} />
 		</section>
-		<section onClick={() => setPage('DeckPage')} className="section pure-button">戻る</section>
+	</Fragment>
+}
+
+function DeckTab({mode, setMode, resetGame}){
+	return <Fragment>
+		<div className='deck-tab'>
+			<div onClick={() => setMode('view')} className={`deck-tab-item ${mode === 'view' && 'is-active'}`}>閲覧</div>
+			<div onClick={() => setMode('add')} className={`deck-tab-item ${mode === 'add' && 'is-active'}`}>追加</div>
+			<div onClick={() => setMode('remove')} className={`deck-tab-item ${mode === 'remove' && 'is-active'}`}>削除</div>
+			<div onClick={resetGame} className={`deck-tab-item ${mode === 'reset' && 'is-active'}`}>リセット</div>
+		</div>
 	</Fragment>
 }
 
 function DeckPage(props){
-	return <DeckViewMode {...props} />
+	const [mode, setMode] = useState('view')
+
+	const components = {
+		view: <DeckModeView {...props}/>,
+		add: <DeckModeAdd {...props}/>,
+		remove: <DeckModeRemove {...props}/>,
+	}
+
+	return <Fragment>
+		<DeckTab mode={mode} setMode={setMode} resetGame={props.resetGame}/>
+		{components[mode]}
+	</Fragment>
 }
 
 // Deck
@@ -201,7 +213,7 @@ function App(){
 
 	const PAGES = {
 		FieldPage: <FieldPage setPage={setPage} fieldAction={fieldAction}/>,
-		DeckPage: <DeckPage setPage={setPage} deck={deck} resetGame={resetGame}/>,
+		DeckPage: <DeckPage setPage={setPage} deck={deck} deckAction={deckAction} field={field} resetGame={resetGame}/>,
 		DeckModeAdd: <DeckModeAdd setPage={setPage} field={field} deck={deck} deckAction={deckAction}/>,
 		DeckModeRemove: <DeckModeRemove setPage={setPage} deck={deck} deckAction={deckAction}/>,
 	}

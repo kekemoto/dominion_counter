@@ -1,6 +1,6 @@
 body {
 	font-size: 1.5em;
-	font-family: "M PLUS Rounded 1c", "游ゴシック", YuGothic, "ヒラギノ角ゴ ProN W3", "Hiragino Kaku Gothic ProN", "Arial", "メイリオ";
+	font-family: 'M PLUS 1p', Arial;
 }
 
 .row {
@@ -43,18 +43,27 @@ body {
 
 /* deck */
 
-.deck-cell {
+.deck-tab {
+	display: flex;
+	position: sticky;
+	top: 0;
+	background-color: white;
+}
+
+.deck-tab-item {
+	text-align: center;
 	flex-grow: 1;
+	padding: 0.5em;
+	border-bottom: solid thin;
+}
+
+.deck-tab-item.is-active {
+	border-color: #209CEE;
+	color: #209CEE;
 }
 
 .deck-section {
 	margin: 0.5em;
-}
-
-.deck-footer {
-	position: fixed;
-	bottom: 0;
-	width: 100vw;
 }
 
 /* field */
@@ -70,7 +79,6 @@ body {
 }
 
 .field-selected {
-	text-align: center;
 	background-color: lightskyblue;
 }
 
