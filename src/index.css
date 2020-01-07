@@ -1,6 +1,7 @@
 body {
-	font-size: 1.5em;
 	font-family: 'M PLUS 1p', Arial;
+	font-size: 1.5em;
+	font-weight: 300;
 }
 
 .row {
@@ -69,6 +70,8 @@ body {
 /* field */
 
 .field-title {
+	font-size: 130%;
+	font-weight: bolder;
 	text-align: center;
 	margin: 0.5em 0;
 }
@@ -76,14 +79,17 @@ body {
 .field-card {
 	text-align: center;
 	padding: 0.5em;
+	border-radius: 1.2em;
 }
 
 .field-selected {
-	background-color: lightskyblue;
+	background-color: #50b1f2;
+	color: white;
 }
 
 .field-random {
-	background-color: #d2ffd2;
+	background-color: #00d1b2;
+	color: white
 }
 
 .field-submit {
