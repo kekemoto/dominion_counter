@@ -30,18 +30,6 @@ body {
 	min-width: 7em;
 }
 
-/* add-card */
-
-.add-card-title {
-	text-align: center;
-	margin: 1em;
-}
-
-.add-card-card {
-	text-align: center;
-	margin: 0.5em;
-}
-
 /* deck */
 
 .deck-tab {
@@ -61,10 +49,6 @@ body {
 .deck-tab-item.is-active {
 	border-color: #209CEE;
 	color: #209CEE;
-}
-
-.deck-section {
-	margin: 0.5em;
 }
 
 /* field */
