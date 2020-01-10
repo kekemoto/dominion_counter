@@ -2,8 +2,8 @@ name,pack,type,value,defaultField,sortOrder,cost
 金貨,共通,money,3,TRUE,990101,6
 銀貨,共通,money,2,TRUE,990102,3
 銅貨,共通,money,1,TRUE,990103,0
-属州,共通,point,8,TRUE,990201,8
-公領,共通,point,5,TRUE,990202,5
+属州,共通,point,6,TRUE,990201,8
+公領,共通,point,3,TRUE,990202,5
 屋敷,共通,point,1,TRUE,990203,2
 呪い,共通,point,-1,TRUE,990204,0
 地下貯蔵庫,基本,action,,FALSE,10201,2

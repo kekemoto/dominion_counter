@@ -104,6 +104,10 @@ function DeckView({deck}){
 	useEffect(() => {
 		setIsLoad(true)
 		workerRef.current.postMessage(deck.toArray())
+
+		return () => {
+			workerRef.current.terminate()
+		}
 	}, [deck])
 
 	return <Fragment>

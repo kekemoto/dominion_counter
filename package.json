@@ -4,9 +4,9 @@
   "description": "dominion support tool",
   "main": "src/index.html",
   "scripts": {
-    "start": "parcel src/index.html",
+    "start": "parcel src/index.html --out-dir ./docs",
     "data": "node data/convert.js",
-    "build": "rm ./dist/*; parcel build src/index.html --public-url /dist"
+    "build": "rm ./docs/*; parcel build src/index.html --public-url /docs --out-dir ./docs"
   },
   "keywords": [
     "dominion",
