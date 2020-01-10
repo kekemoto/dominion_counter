@@ -4,6 +4,10 @@ body {
 	font-weight: 300;
 }
 
+td {
+	padding: .3em;
+}
+
 .row {
 	display: flex;
 	flex-wrap: wrap;
@@ -47,8 +51,8 @@ body {
 }
 
 .deck-tab-item.is-active {
-	border-color: #209CEE;
-	color: #209CEE;
+	border-color: hsl(204, 86%, 53%);
+	color: hsl(204, 86%, 53%);
 }
 
 /* field */
@@ -67,12 +71,12 @@ body {
 }
 
 .field-selected {
-	background-color: #50b1f2;
+	background-color: hsl(204, 86%, 63%);
 	color: white;
 }
 
 .field-random {
-	background-color: #00d1b2;
+	background-color: hsl(171, 100%, 41%);
 	color: white
 }
 
@@ -80,4 +84,45 @@ body {
 	text-align: center;
 	border: solid thin;
 	margin: 0.5em;
+}
+
+/* loading animation */
+
+.loader {
+	width: .65em;
+	height: .65em;
+	position: relative;
+	border-radius: 50%;
+	display: inline-block;
+
+	border-top: .175em solid hsla(204, 86%, 53%, .2);
+	border-right: .175em solid hsla(204, 86%, 53%, .2);
+	border-bottom: .175em solid hsla(204, 86%, 53%, .2);
+	border-left: .175em solid hsl(204, 86%, 53%, .6);
+
+	-webkit-transform: translateZ(0);
+	-ms-transform: translateZ(0);
+	transform: translateZ(0);
+	-webkit-animation: load8 .6s infinite linear;
+	animation: load8 .6s infinite linear;
+}
+@-webkit-keyframes load8 {
+	0% {
+		-webkit-transform: rotate(0deg);
+		transform: rotate(0deg);
+	}
+	100% {
+		-webkit-transform: rotate(360deg);
+		transform: rotate(360deg);
+	}
+}
+@keyframes load8 {
+	0% {
+		-webkit-transform: rotate(0deg);
+		transform: rotate(0deg);
+	}
+	100% {
+		-webkit-transform: rotate(360deg);
+		transform: rotate(360deg);
+	}
 }

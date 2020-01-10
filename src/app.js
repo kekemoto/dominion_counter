@@ -1,10 +1,10 @@
-import React, { Fragment, useState, useEffect, useReducer } from 'react'
+import React, { Fragment, useState, useEffect, useReducer, useRef } from 'react'
 import ReactDOM from 'react-dom'
 import { Map, List, Set, Range } from 'immutable'
 import { combinations, round } from 'mathjs'
 
-import { CARDS } from '../data/cards.js'
-import { shuffleList, findCardName, ACTION_CARDS, DEFAULT_FIELD_CARDS, DRAW_SIZE } from './util.js'
+import { CARDS } from '../data/cards'
+import { shuffleList, findCardName, ACTION_CARDS, DEFAULT_FIELD_CARDS, DRAW_SIZE } from './common'
 
 // Field
 
@@ -35,7 +35,7 @@ function FieldPage({setPage, fieldAction}){
 		fieldAction({type: 'set', cards: cards.values()})
 		setPage('DeckPage')
 	}
-	
+
 	return <Fragment>
 		<div className='field-title'>プレイするカードを選択</div>
 		<div className='row'>{
@@ -89,12 +89,31 @@ function DeckCards({cards, deck, onClickCard = new Function}){
 
 function DeckView({deck}){
 	const cards = List(deck.keys()).sortBy(x => x.sortOrder)
+	
+	const workerRef = useRef(new Worker('./worker.js'))
+	const [exp, setExp] = useState()
+	const [isLoad, setIsLoad] = useState(true)
+
+	useEffect(() => {
+		workerRef.current.onmessage = e => {
+			setExp(e.data)
+			setIsLoad(false)
+		}
+	}, [])
+
+	useEffect(() => {
+		setIsLoad(true)
+		workerRef.current.postMessage(deck.toArray())
+	}, [deck])
 
 	return <Fragment>
-		<section className='section'>
-			<div>カード総数：{deckSize(deck)}</div>
-			<div>勝利点：{deckPoint(deck)}</div>
-		</section>
+		<table className='section'>
+			<tbody>
+				<tr><td>カード総数</td><td>{deckSize(deck)}</td></tr>
+				<tr><td>勝利点</td><td>{deckPoint(deck)}</td></tr>
+				<tr><td>財宝の期待値</td><td>{exp}<div className={isLoad ? 'loader' : ''}></div></td></tr>
+			</tbody>
+		</table>
 
 		<section className='section'>
 			<DeckCards cards={cards} deck={deck} />
