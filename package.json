@@ -6,7 +6,7 @@
   "scripts": {
     "start": "parcel src/index.html --out-dir ./docs",
     "data": "node data/convert.js",
-    "build": "rm ./docs/*; parcel build src/index.html --public-url /docs --out-dir ./docs"
+    "build": "rm ./docs/*; parcel build src/index.html --out-dir ./docs"
   },
   "keywords": [
     "dominion",
